@@ -27,10 +27,14 @@ void RoombaController::go_straight()
         cmd_vel.cntl.linear.x = 0;
         cmd_vel.cntl.angular.z = 1.0;
     }
-    cmd_vel.cntl.linear.x = 0.1;
+    else
+    {
+        cmd_vel.cntl.linear.x = 0.3;
+        cmd_vel.cntl.angular.z = 1.0;
+    }
 
     distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
-
+    cmd_vel.mode = 11;
     pub_cmd_vel.publish(cmd_vel);
 }
 
