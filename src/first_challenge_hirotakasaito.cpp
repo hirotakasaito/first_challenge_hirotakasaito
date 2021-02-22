@@ -4,8 +4,8 @@ RoombaController::RoombaController():private_nh("~")
 {
     private_nh.param("hz",hz,{10});
 
-    sub_pose = nh.subscribe("roomba/control",10,&RoombaController::pose_callback,this);
-    pub_cmd_vel = nh.advertise<roomba_500driver_meiji::RoombaCtrl>("roomba/cmd_vel",1);
+    sub_pose = nh.subscribe("roomba/odometry",10,&RoombaController::pose_callback,this);
+    pub_cmd_vel = nh.advertise<roomba_500driver_meiji::RoombaCtrl>("roomba/control",1);
 }
 
 void RoombaController::pose_callback(const nav_msgs::Odometry::ConstPtr &msg)
@@ -22,7 +22,7 @@ void RoombaController::go_straight()
         init_pose_x = current_pose.pose.pose.position.x;
         init_pose_y = current_pose.pose.pose.position.y;
     }
-    if(distance == 1)
+    if(distance >= 1)
     {
         cmd_vel.cntl.linear.x = 0;
         cmd_vel.cntl.angular.z = 1.0;
@@ -30,7 +30,6 @@ void RoombaController::go_straight()
     else
     {
         cmd_vel.cntl.linear.x = 0.3;
-        cmd_vel.cntl.angular.z = 1.0;
     }
 
     distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
