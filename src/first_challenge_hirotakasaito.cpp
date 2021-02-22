@@ -1,4 +1,5 @@
 #include "first_challenge_hirotakasaito/first_challenge_hirotakasaito.h"
+#include <tf/transform_datatypes.h>
 
 RoombaController::RoombaController():private_nh("~")
 {
@@ -33,6 +34,12 @@ void RoombaController::go_straight()
     }
 
     distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
+    tf::Quaternion q(current_pose.pose.pose.orientation.x, current_pose.pose.pose.orientation.y, current_pose.pose.pose.orientation.z, current_pose.pose.pose.orientation.w);
+
+    tf::Matrix3x3 m(q);
+    double roll, pitch, yaw;
+    m.getRPY(roll, pitch, yaw);
+    ROS_INFO_STREAM(yaw);
     cmd_vel.mode = 11;
     pub_cmd_vel.publish(cmd_vel);
 }
