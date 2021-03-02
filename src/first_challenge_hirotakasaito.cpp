@@ -9,7 +9,7 @@ RoombaController::RoombaController():private_nh("~")
     private_nh.param("terminal_vel_z",terminal_vel_z,{0.1});
 
     sub_pose = nh.subscribe("roomba/odometry",10,&RoombaController::pose_callback,this);
-    sub_scan = nh.subscribe("laserscan",10,&RoombaController::pose_callback_lider,this);
+    sub_scan = nh.subscribe("scan",10,&RoombaController::pose_callback_lider,this);
 
     pub_cmd_vel = nh.advertise<roomba_500driver_meiji::RoombaCtrl>("roomba/control",1);
 }
