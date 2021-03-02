@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg = "first_challenge_hirotakasaito" name ="first_challenge_hirotakasaito" type = "first_challenge_hirotakasaito" >
+    <node pkg = "first_challenge_hirotakasaito" name ="first_challenge_hirotakasaito" type = "first_challenge_hirotakasaito" output ="screen" >
         <param name="hz" value="20" />
         <param name="terminal_vel_z" value="0.1" />
         <param name="goal" value="0.5" />
     </node>
     <node pkg = "roomba_500driver_meiji" name = "main500" type="main500"/>
-    </node>
 </launch>
