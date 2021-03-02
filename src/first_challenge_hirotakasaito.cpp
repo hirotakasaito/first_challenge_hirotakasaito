@@ -7,6 +7,7 @@ RoombaController::RoombaController():private_nh("~")
     private_nh.param("hz",hz,{10});
     private_nh.param("goal",goal,{1});
     private_nh.param("terminal_vel_z",terminal_vel_z,{0.1});
+    private_nh.param("scan_cout",scan_cout,{1080});
 
     sub_pose = nh.subscribe("roomba/odometry",10,&RoombaController::pose_callback,this);
     sub_scan = nh.subscribe("scan",10,&RoombaController::pose_callback_lider,this);
@@ -49,10 +50,15 @@ void RoombaController::move_roomba()
                 init_pose_y = current_pose.pose.pose.position.y;
                 straight_count = 2;
             }
-            if(distance >= goal)
+            if(laserscan.ranges.size() != 0)
             {
-                //ここでlidarの処理
-                cmd_vel.cntl.linear.x = 0;
+                ROS_INFO_STREAM(laserscan.ranges[scan_cout]);
+                if(laserscan.ranges[scan_cout] <= 0.5)
+                {
+                    //ここでlidarの処理
+                    ROS_INFO_STREAM("aa");
+                     cmd_vel.cntl.linear.x = 0;
+                 }
             }
             distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
         cmd_vel.cntl.linear.x = 0;
@@ -91,9 +97,7 @@ void RoombaController::move_roomba()
         }
         distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
     }
-    scan_cout = (int)(laserscan.angle_max - laserscan.angle_min) / (2*laserscan.angle_increment);
 
-    ROS_INFO_STREAM(laserscan.ranges[scan_cout]);
     cmd_vel.mode = 11;//ルンバのモード
     pub_cmd_vel.publish(cmd_vel);
 }

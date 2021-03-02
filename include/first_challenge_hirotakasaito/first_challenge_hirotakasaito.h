@@ -17,8 +17,8 @@ private:
     void pose_callback_lider(const sensor_msgs::LaserScan::ConstPtr &);
 
     int hz;
+    int scan_cout;
     int straight_count = 0;
-    float scan_cout = 0.0;
     float terminal_vel_z;
     float goal;
     float init_pose_x = 0.0;

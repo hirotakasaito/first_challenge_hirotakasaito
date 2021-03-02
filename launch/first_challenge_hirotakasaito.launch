@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg = "first_challenge_hirotakasaito" name ="first_challenge_hirotakasaito" type = "first_challenge_hirotakasaito" output ="screen" >
-        <param name="hz" value="20" />
+        <param name="hz" value="50" />
         <param name="terminal_vel_z" value="0.1" />
         <param name="goal" value="0.5" />
+        <param name="scan_cout" value="540" />
     </node>
     <node pkg = "roomba_500driver_meiji" name = "main500" type="main500"/>
-    <node pkg = "urg_node" name = "urg_node" type="urg_node" />
+    <node pkg = "urg_node" name = "urg_node" type="urg_node" >
+        <param name="serial_port" value="/dev/ttyACM0"/>
+   </node>
 </launch>
