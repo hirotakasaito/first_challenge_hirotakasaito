@@ -9,6 +9,8 @@ RoombaController::RoombaController():private_nh("~")
     private_nh.param("terminal_vel_z",terminal_vel_z,{0.1});
 
     sub_pose = nh.subscribe("roomba/odometry",10,&RoombaController::pose_callback,this);
+    sub_scan = nh.subscribe("laserscan",10,&RoombaController::pose_callback_lider,this);
+
     pub_cmd_vel = nh.advertise<roomba_500driver_meiji::RoombaCtrl>("roomba/control",1);
 }
 
@@ -17,13 +19,17 @@ void RoombaController::pose_callback(const nav_msgs::Odometry::ConstPtr &msg)
     current_pose = *msg;
 }
 
+void RoombaController::pose_callback_lider(const sensor_msgs::LaserScan::ConstPtr &msg)
+{
+    laserscan = *msg;
+}
+
 void RoombaController::move_roomba()
 {
     tf::Quaternion q(current_pose.pose.pose.orientation.x, current_pose.pose.pose.orientation.y, current_pose.pose.pose.orientation.z, current_pose.pose.pose.orientation.w);
     tf::Matrix3x3 m(q);
     double roll, pitch, yaw;
     m.getRPY(roll, pitch, yaw);
-    ROS_INFO_STREAM(yaw);
 
     if(init_pose_x == 0)
     {
@@ -85,6 +91,12 @@ void RoombaController::move_roomba()
         }
         distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
     }
+    ROS_INFO_STREAM(laserscan.range_min);
+    ROS_INFO_STREAM(laserscan.range_max);
+    ROS_INFO_STREAM(laserscan.scan_time);
+    ROS_INFO_STREAM(laserscan.range_min);
+    ROS_INFO_STREAM(laserscan.angle_min);
+    ROS_INFO_STREAM(laserscan.angle_max);
     cmd_vel.mode = 11;//ルンバのモード
     pub_cmd_vel.publish(cmd_vel);
 }
