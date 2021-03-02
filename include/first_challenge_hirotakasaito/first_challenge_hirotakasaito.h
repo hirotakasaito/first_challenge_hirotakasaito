@@ -9,14 +9,18 @@ class RoombaController
 public:
     RoombaController();
     void process();
-    void go_straight();
+    void move_roomba();
 
 private:
     void pose_callback(const nav_msgs::Odometry::ConstPtr &);
 
     int hz;
+    int straight_count = 0;
+    float terminal_vel_z;
+    float goal;
     float init_pose_x = 0.0;
     float init_pose_y = 0.0;
+    float abs_current_theta = 0.0;
     float distance = 0.0;
     ros::Publisher pub_cmd_vel;
     ros::Subscriber sub_pose;
