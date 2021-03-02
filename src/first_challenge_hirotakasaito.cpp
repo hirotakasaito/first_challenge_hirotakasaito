@@ -91,12 +91,9 @@ void RoombaController::move_roomba()
         }
         distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
     }
-    ROS_INFO_STREAM(laserscan.range_min);
-    ROS_INFO_STREAM(laserscan.range_max);
-    ROS_INFO_STREAM(laserscan.scan_time);
-    ROS_INFO_STREAM(laserscan.range_min);
-    ROS_INFO_STREAM(laserscan.angle_min);
-    ROS_INFO_STREAM(laserscan.angle_max);
+    scan_cout = (angle_max -angle_min) / (2*angle_increment);
+
+    ROS_INFO_STREAM(laserscan.ranges[scan_cout]);
     cmd_vel.mode = 11;//ルンバのモード
     pub_cmd_vel.publish(cmd_vel);
 }
