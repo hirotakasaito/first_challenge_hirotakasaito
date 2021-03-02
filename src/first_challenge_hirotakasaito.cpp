@@ -32,7 +32,7 @@ void RoombaController::move_roomba()
     }
     if(distance >= goal)
     {
-        if(abs_current_theta >= (2*M_PI - 0.01))
+        if(abs_current_theta >= (2*M_PI - 0.1))
         {
             cmd_vel.cntl.angular.z = 0.0;
             cmd_vel.cntl.linear.x = 0.3;
@@ -54,14 +54,16 @@ void RoombaController::move_roomba()
         else
         {
             //回転速度を調整する、最初は早く、目標に近づくほど遅くする
+            cmd_vel.cntl.linear.x = 0.0;
             cmd_vel.cntl.angular.z = 0.2*round((2*M_PI - 0.01) - abs_current_theta);
             //0にならないようにする
             if(cmd_vel.cntl.angular.z == 0)
             {
+                cmd_vel.cntl.linear.x = 0.0;
                 cmd_vel.cntl.angular.z = terminal_vel_z;
             }
             //0から2πの範囲に変換する
-            if(abs_current_theta >= (M_PI - 0.01))
+            if(abs_current_theta >= (M_PI - 0.1))
             {
                 abs_current_theta = 2*M_PI - fabs(yaw);
             }
