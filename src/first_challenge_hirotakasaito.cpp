@@ -91,7 +91,7 @@ void RoombaController::move_roomba()
         }
         distance = sqrt((current_pose.pose.pose.position.x - init_pose_x) * (current_pose.pose.pose.position.x - init_pose_x) + (current_pose.pose.pose.position.y - init_pose_y) * (current_pose.pose.pose.position.y - init_pose_y));
     }
-    scan_cout = (laserscan.angle_max - laserscan.angle_min) / (2*laserscan.angle_increment);
+    scan_cout = (int)(laserscan.angle_max - laserscan.angle_min) / (2*laserscan.angle_increment);
 
     ROS_INFO_STREAM(laserscan.ranges[scan_cout]);
     cmd_vel.mode = 11;//ルンバのモード

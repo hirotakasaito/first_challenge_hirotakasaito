@@ -18,7 +18,7 @@ private:
 
     int hz;
     int straight_count = 0;
-    int scan_cout = 0.0;
+    float scan_cout = 0.0;
     float terminal_vel_z;
     float goal;
     float init_pose_x = 0.0;
